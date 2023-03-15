@@ -1,12 +1,11 @@
 //getProducts récupère les données de l'API et les retournes en format JSON.
-async function getProducts() {
+const getProducts = async () => {
     const reply = await fetch("http://localhost:3000/api/products");
     return await reply.json();
 }
 
 //generateProducts créer du contenu HTML pour chaque produit récupéré.
-// const generateProducts = (products) => {
-function generateProducts(products) {
+const generateProducts = (products) => {
     let display = "";
 
     for (let product of products) {
@@ -24,7 +23,7 @@ function generateProducts(products) {
 }
 
 //start permet d'attendre que la liste de produits soit stocké avant de lancer la création du contenu HTML.
-async function start() {
+const start = async () => {
     const products = await getProducts();
     generateProducts(products);
 }

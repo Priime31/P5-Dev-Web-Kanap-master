@@ -5,13 +5,13 @@ const url = new URL(window.location.href);
 const id = url.searchParams.get("id");
 
 //récupère dans l'API les données du produit correspondant à l'id de la page au format JSON.
-async function getProductsById() {
+const getProductsById = async () => {
     const reponseId = await fetch('http://localhost:3000/api/products/' + id);
     return await reponseId.json();
 }
 
 //créer du contenu HTML avec les données retournées par l'API.
-function generateProducts(product) {
+const generateProducts = (products) => {
     const itemImg = document.querySelector(".item__img");
     const itemName = document.querySelector("#title");
     const itemPrice = document.querySelector("#price");
@@ -36,7 +36,7 @@ function generateProducts(product) {
 }
 
 //stock les données liées à l'id du produit dans une constante puis créer le HTML.
-async function start() {
+const start = async () => {
     const product = await getProductsById();
     generateProducts(product);
 }
@@ -53,7 +53,7 @@ addButton.addEventListener("click", function pushCart() {
     let quantity = document.getElementById("quantity").value;
     
     //cherche un objet dans le panier correspondant aux valeurs id et color de la page produit 
-    function indentObject(id, color, quantity) {
+    const indentObject = (id, color, quantity) => {
         
 /*
         const toto = cart.map((product) => {
