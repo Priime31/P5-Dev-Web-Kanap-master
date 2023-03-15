@@ -1,17 +1,17 @@
+//stock l'url de la page product dans une variable.
 const url = new URL(window.location.href);
-console.log("l'url du site est" + url);
 
+//cherche dans l'url l'id du produit puis le stock dans une variable.
 const id = url.searchParams.get("id");
-console.log(id);
 
+//récupère dans l'API les données du produit correspondant à l'id de la page au format JSON.
 async function getProductsById() {
     const reponseId = await fetch('http://localhost:3000/api/products/' + id);
     return await reponseId.json();
 }
 
-function generateProductsById(product) {
-    const color = product.colors;
-
+//créer du contenu HTML avec les données retournées par l'API.
+function generateProducts(product) {
     const itemImg = document.querySelector(".item__img");
     const itemName = document.querySelector("#title");
     const itemPrice = document.querySelector("#price");
@@ -25,6 +25,7 @@ function generateProductsById(product) {
     itemPrice.innerHTML = product.price;
     itemDescription.innerHTML = product.description;
 
+    //créer une balise <option> pour chaque couleur proposée pour le produit.
     for (let color of product.colors) {
         const colorOption = document.createElement("option");
         colorOption.innerText = color;
@@ -34,42 +35,81 @@ function generateProductsById(product) {
     }
 }
 
-function createOptionElement(value, text = value) {
-    const option = document.createElement("option");
-
-    option.innerText = text;
-    option.value = value;
-
-    return option;
-}
-
-async function startProduct() {
+//stock les données liées à l'id du produit dans une constante puis créer le HTML.
+async function start() {
     const product = await getProductsById();
-    generateProductsById(product);
+    generateProducts(product);
 }
 
-startProduct();
+start();
 
+//créer un évenement sur le bouton "ajouter au panier"
 const addButton = document.querySelector(".item__content__addButton");
 addButton.addEventListener("click", function pushCart() {
+    //stock dans la variable "cart" soit le panier déjà présent dans le localStorage soit s'il n'y a rien, un panier vide.
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    console.log(cart);
     let color = document.getElementById("colors").value;
+    console.log(color);
     let quantity = document.getElementById("quantity").value;
+    
+    //cherche un objet dans le panier correspondant aux valeurs id et color de la page produit 
+    function indentObject(id, color, quantity) {
+        
+/*
+        const toto = cart.map((product) => {
+            console.log(product.quantity);
+            product.quantity++;
+            console.log(product.quantity);
+            return product;
+        });*/
+        //console.log(toto);
 
-    if (color != "--SVP, choisissez une couleur --" && quantity != 0) {
-        let cartObject = {
-            id: id,
-            couleur: color,
-            quantité: quantity,
-        };
 
-        cart.push(cartObject);
+        for (let product of cart) {
+            console.log(product);
+            if (product.id === id && product.coulor === color) {
+                console.log("id et color dans le panier");
+                /*const cartQuantity = parseInt(product["quantity"]);
+                const objectQuantity = parseInt(quantity);*/
 
+                product.quantity = product.quantity + parseInt(quantity);
+
+            } else {
+                console.log("non présent dans le panier");
+                if (color !== "" && quantity !== 0) {
+                    let cartObject = {
+                        id: id,
+                        coulor: color,
+                        quantity: parseInt(quantity),
+                    };
+                
+                    cart.push(cartObject);
+                
+                    
+                }
+            }
+            
+        }
         localStorage.setItem("cart", JSON.stringify(cart));
     }
 
+    if (cart.length === 0) {
+        if (color !== "" && quantity != 0) {
+            let cartObject = {
+                id: id,
+                color: color,
+                quantity: parseInt(quantity),
+            };
+    
+            cart.push(cartObject);
+    
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+    } else {
+        indentObject(id, color, quantity);
+    }
 
+    console.log(cart);
 });
 
 
