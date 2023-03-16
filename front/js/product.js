@@ -51,9 +51,8 @@ addButton.addEventListener("click", function pushCart() {
     let color = document.getElementById("colors").value;
     let quantity = parseInt(document.getElementById("quantity").value);
 
-    /*cherche un objet dans le panier correspondant aux valeurs id et color de la page produit puis s'il y a une correspondance, incrémente
-    la quantité selectionnée par l'utilisateur, sinon créer l'objet dans le panier.*/
-
+    /*checkValues recherche une correspondance aux informations selectionnées par l'utilisateur dans le panier (local storage) puis renvois
+    "true" si c'est le cas pour pouvoir entrer dans une fonction.*/
     const checkValues = () => {
         for (let item of cart) {
             if (item.id === id && item.color === color) {
@@ -63,6 +62,7 @@ addButton.addEventListener("click", function pushCart() {
     };
 
     if (cart.length === 0) {
+        //Si le panier est vide, créer un nouvel objet panier.
         if (color !== "" && quantity != 0) {
             let cartObject = {
                 id: id,
@@ -75,6 +75,7 @@ addButton.addEventListener("click", function pushCart() {
             localStorage.setItem("cart", JSON.stringify(cart));
         }
     } else if (checkValues() === true) {
+        //indentObject est une copie du panier(cart) modifiée pour que les nouvelles quantités soient incrémentées.
         let indentObject = cart.map((product) => {
             if (product.id === id && product.color === color) {
                 product.quantity += quantity;
@@ -84,6 +85,7 @@ addButton.addEventListener("click", function pushCart() {
         cart = indentObject;
         localStorage.setItem("cart", JSON.stringify(cart));
     } else {
+        //Si le panier n'est pas vide MAIS que les informations selectionnées par l'utilisateur ne correspondent pas, créer un nouvel objet.
         if (color !== "" && quantity != 0) {
             let cartObject = {
                 id: id,
