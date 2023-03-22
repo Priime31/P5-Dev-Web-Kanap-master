@@ -6,8 +6,8 @@ const id = url.searchParams.get("id");
 
 //récupère dans l'API les données du produit correspondant à l'id de la page au format JSON.
 const getProductsById = async () => {
-    const reponseId = await fetch("http://localhost:3000/api/products/" + id);
-    return await reponseId.json();
+    const answerId = await fetch("http://localhost:3000/api/products/" + id);
+    return await answerId.json();
 };
 
 //créer du contenu HTML avec les données retournées par l'API.
@@ -22,8 +22,8 @@ const generateProducts = (product) => {
     idImage.src = product.imageUrl;
     itemImg.appendChild(idImage);
     itemName.innerText = product.name;
-    itemPrice.innerHTML = product.price;
-    itemDescription.innerHTML = product.description;
+    itemPrice.innerText = product.price;
+    itemDescription.innerText = product.description;
 
     //créer une balise <option> pour chaque couleur proposée pour le produit.
     for (let color of product.colors) {
