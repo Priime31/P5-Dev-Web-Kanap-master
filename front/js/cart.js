@@ -159,7 +159,7 @@ const addListener = () => {
         }
 
         //vérifie la validité des informations entrées par l'utilisateur puis les envois à l'API et récupère la réponse au format JSON.
-        postOrder = async () => {
+        const postOrder = async () => {
             if (
                 validFirstName === true &&
                 validLastName === true &&
@@ -170,7 +170,7 @@ const addListener = () => {
                 const order = [];
                 cart.map((product) => {
                     order.push(product.id);
-                });
+                })
                 let userOrder = {
                     contact: {
                         firstName: firstName.value,
@@ -190,10 +190,7 @@ const addListener = () => {
                     .then((answer) => {
                         return answer.json();
                     })
-                    .then(
-                        (answer) =>
-                            (window.location.href = `../html/confirmation.html?orderId=${answer.orderId}`)
-                    )
+                    .then((answer) => window.location.href = `../html/confirmation.html?orderId=${answer.orderId}`)
                     .catch((err) => {
                         console.log(
                             "Une erreur est survenue lors de la requête :" + err
@@ -201,5 +198,7 @@ const addListener = () => {
                     });
             }
         };
+
+        postOrder();
     });
 };
